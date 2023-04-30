@@ -20,7 +20,7 @@ function CurrenciesCard(props: Props) {
         </div>
       </div>
       <div className="hoveringWrapper">
-        <a href={`/?From=${fromCurrency.value}&To=${key}`}>
+        <a href={`/?From=${(fromCurrency && fromCurrency.value) || ''}&To=${key}`}>
           <button className="card-btn card-btn-middle">Use</button>
         </a>
       </div>

@@ -1,17 +1,8 @@
 import React, {useState, useCallback, useContext, useMemo} from 'react';
-import clsx from 'clsx';
-import {Box, Button, Typography, Snackbar} from '@material-ui/core';
-import {useHistory, Link} from 'react-router-dom';
-import {Apartment, Delete} from '@material-ui/icons';
+import {useHistory} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
-import MuiAlert, {AlertProps} from '@material-ui/lab/Alert';
-import {injectParamsIntoUrl} from 'shared/utils';
 
 import './index.css';
-
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 function CompaniesList() {
   const {t} = useTranslation();

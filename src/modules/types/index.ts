@@ -3,58 +3,46 @@ import {Currency} from 'modules/Converter/definitions/types';
 export const AppPaths = {
   HOME: '/',
 };
-export const Currencies = [
-  {
+
+export const CurrenciesSymbols = {
+  USD: {
+    symbol: '$',
     name: 'United States dollar',
-    value: 'USD',
-    symbol: '$',
   },
-  {
-    name: 'European Union',
-    value: 'EUR',
+  EUR: {
     symbol: '€',
+    name: 'European Union',
   },
-  {
+  GBP: {
+    symbol: '£',
     name: 'British Pound',
-    value: 'GBP',
-    symbol: '£',
   },
-  {
+  EGP: {
+    symbol: '£',
     name: 'Egypation Pound',
-    value: 'EGP',
-    symbol: '£',
   },
-  {
+  JPY: {
+    symbol: '¥',
     name: 'Japanese Yen',
-    value: 'JPY',
-    symbol: '¥',
   },
-  {
+  AUD: {
+    symbol: '$',
     name: 'Australian Dollar',
-    value: 'AUD',
-    symbol: '$',
   },
-  {
+  CAD: {
+    symbol: '$',
     name: 'Canadian Dollar',
-    value: 'CAD',
-    symbol: '$',
   },
-  {
-    name: 'Swiss Franc',
-    value: 'CHF',
+  CHF: {
     symbol: '₣',
+    name: 'Swiss Franc',
   },
-  {
+  CNY: {
+    symbol: '$',
     name: 'Chinese Yuan',
-    value: 'CNY',
-    symbol: '¥',
   },
-  {
-    name: 'Swedish Krona',
-    value: 'SEK',
-    symbol: 'kr',
-  },
-];
+};
+
 export const InitRates = {
   '2022-01-01': {
     USD: 0.063655,

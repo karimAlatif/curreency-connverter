@@ -1,16 +1,7 @@
 import React, {useState, useCallback, useContext, useMemo} from 'react';
-import clsx from 'clsx';
-import {Box, Button, Typography, Snackbar} from '@material-ui/core';
-import {useHistory, Link} from 'react-router-dom';
-import {Apartment, Delete} from '@material-ui/icons';
 import ConverterContext from '../../context/ConverterContext';
-import DeleteDialog from './deleteDialog';
 import {useTranslation} from 'react-i18next';
-import MuiAlert, {AlertProps} from '@material-ui/lab/Alert';
-import {injectParamsIntoUrl} from 'shared/utils';
-// import {Company} from '../../definitions/types/Converter';
 import SpinningComponent from '../../../../shared/components/SpinningComponent';
-
 import ConverterPanel from './ConverterPanel';
 import BackGround from './BackGround';
 import CurrenciesGrid from './CurrenciesGrid';
@@ -18,16 +9,8 @@ import Chart from './Chart';
 
 import './index.css';
 
-function Alert(props: AlertProps) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
 function CompaniesList() {
   const {t} = useTranslation();
-  const [selectedCompaniesIds, setSelectedCompaniesIds] = useState<string[]>([]);
-  const [highlightedCompanyId, sethHighlightedCompanyId] = useState<string>('');
-  const [isAlertDialog, setIsAlertDialog] = useState(false);
-  const history = useHistory();
   const {
     isLoadingRates,
     toCurrency,
@@ -48,7 +31,9 @@ function CompaniesList() {
               <>
                 <div className="heroTop">
                   <h1>Currency Converter</h1>
-                  <h3>{`Convert ${fromCurrency.name} (${fromCurrency.value}) to ${toCurrency.name} (${toCurrency.value})`}</h3>
+                  {fromCurrency && toCurrency && (
+                    <h3>{`Convert ${fromCurrency.name} (${fromCurrency.value}) to ${toCurrency.name} (${toCurrency.value})`}</h3>
+                  )}
                 </div>
                 <div className="heroContainer">
                   <div className="heroWrapper">

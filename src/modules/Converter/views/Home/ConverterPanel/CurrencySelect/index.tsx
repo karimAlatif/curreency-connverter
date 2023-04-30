@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import './index.css';
-import {Currencies} from 'modules/types';
+import ConverterContext from '../../../../context/ConverterContext';
 
 interface Props {
   isDiabled?: boolean;
@@ -10,6 +10,8 @@ interface Props {
 
 const CurrencySelect = (props: Props) => {
   const {value, isDiabled, onChange} = props;
+
+  const {allCurrencies} = useContext(ConverterContext);
 
   return (
     <div className={'selectWrapper'}>
@@ -22,7 +24,7 @@ const CurrencySelect = (props: Props) => {
           onChange(value);
         }}
       >
-        {Currencies.map((currency, index) => (
+        {allCurrencies.map((currency, index) => (
           <option key={index} value={currency.value} className={'option'}>
             {currency.name} ({currency.symbol})
           </option>

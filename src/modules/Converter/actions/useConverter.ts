@@ -1,38 +1,30 @@
 import {useCallback, useState, useEffect, useMemo} from 'react';
-import {v4 as uuidv4} from 'uuid';
 import * as api from '../api';
 import {Rates, TopRate, QueryWithResult, Currency} from '../definitions/types';
 import {BehaviorSubject, from, mergeMap, reduce, groupBy, last} from 'rxjs';
 import {StringParam, useQueryParam} from 'use-query-params';
-import {Currencies, InitRates} from 'modules/types';
+import {CurrenciesSymbols, InitRates} from 'modules/types';
 
 const symbols = 'USD,EUR,GBP,EGP,JPY,AUD,CAD,CHF,CNY';
 
 const useCompanyList = () => {
-  const queyFromCurrency = useQueryParam('From', StringParam);
-  const toFromCurrency = useQueryParam('To', StringParam);
+  const queryFromCurrency = useQueryParam('From', StringParam);
+  const queryToCurrency = useQueryParam('To', StringParam);
 
-  const [fromCurrency, setFromCurrency] = useState<Currency>(
-    Currencies.find(curr => curr.value === (queyFromCurrency && queyFromCurrency[0])) ||
-      Currencies[0],
-  );
-  const [toCurrency, setToCurrency] = useState<Currency>(
-    Currencies.find(curr => curr.value === (toFromCurrency && toFromCurrency[0])) || Currencies[1],
-  );
+  const [allCurrencies, setAllCurrencies] = useState<Currency[]>([]);
+
+  const [fromCurrency, setFromCurrency] = useState<Currency>();
+  const [toCurrency, setToCurrency] = useState<Currency>();
   const [queryResult, setQueryResult] = useState<QueryWithResult>();
   const [currentRate, setCurrentRate] = useState<number>(0);
   const [topRates, setTopRates] = useState<TopRate[]>([]);
   const [isLoadingCurrency, setIsLoadingCurrency] = useState<boolean>(false);
   const [isLoadingRates, setIsLoadingRates] = useState<boolean>(false);
+  const [isCurrenciesloaded, setIsCurrenciesloaded] = useState<boolean>(true);
   const [ratesByMonth, setRatesByMonth] = useState<Rates>({});
 
-  console.log('fromCurrency', fromCurrency);
-  console.log('toCurrency', toCurrency);
-  console.log('topRates', topRates);
-  console.log('ratesByMonth ===', ratesByMonth);
-
   const IsHomePage = useMemo(() => {
-    return !queyFromCurrency[0] && !toFromCurrency[0];
+    return !queryFromCurrency[0] && !queryToCurrency[0];
   }, []);
 
   const IsSupportedCurrency = useMemo(() => {
@@ -40,39 +32,45 @@ const useCompanyList = () => {
       return true;
     }
     return (
-      Currencies.some(currency => currency.value === queyFromCurrency[0]) &&
-      Currencies.some(currency => currency.value === toFromCurrency[0])
+      allCurrencies.some(currency => currency.value === queryFromCurrency[0]?.toUpperCase()) &&
+      allCurrencies.some(currency => currency.value === queryToCurrency[0]?.toUpperCase())
     );
-  }, []);
+  }, [allCurrencies]);
 
-  console.log('IsSupportedCurrency', IsSupportedCurrency);
-  console.log('IsHomePage', IsHomePage);
+  const currenciesRates$ = useMemo(() => new BehaviorSubject<TopRate[]>([]), []);
+  const allCurrencies$ = useMemo(() => new BehaviorSubject<Currency[]>([]), []);
 
-  const currenciesRates = useMemo(() => new BehaviorSubject<TopRate[]>([]), []);
+  const onChangeFromCurrency = useCallback(
+    (newCurrencyValue: string) => {
+      const selectedCurrency = allCurrencies.find(curr => curr.value === newCurrencyValue);
+      if (selectedCurrency) {
+        setFromCurrency(selectedCurrency);
+      }
+    },
+    [allCurrencies],
+  );
 
-  const onChangeFromCurrency = useCallback((newCurrencyValue: string) => {
-    const selectedCurrency = Currencies.find(curr => curr.value === newCurrencyValue);
-    if (selectedCurrency) {
-      setFromCurrency(selectedCurrency);
-    }
-  }, []);
-
-  const onChangeToCurrency = useCallback((newCurrencyValue: string) => {
-    const selectedCurrency = Currencies.find(curr => curr.value === newCurrencyValue);
-    if (selectedCurrency) {
-      setToCurrency(selectedCurrency);
-    }
-  }, []);
+  const onChangeToCurrency = useCallback(
+    (newCurrencyValue: string) => {
+      const selectedCurrency = allCurrencies.find(curr => curr.value === newCurrencyValue);
+      if (selectedCurrency) {
+        setToCurrency(selectedCurrency);
+      }
+    },
+    [allCurrencies],
+  );
 
   const onConvertCurrency = useCallback(
     (amount: number) => {
+      if (!fromCurrency || !toCurrency) {
+        return;
+      }
       setIsLoadingCurrency(true);
       setIsLoadingRates(true);
       try {
         api
-          .convertAmount(fromCurrency.value, toCurrency.value, amount)
+          .convertAmount(fromCurrency.value, toCurrency && toCurrency.value, amount)
           .then(res => {
-            console.log('res res', res);
             if (!res.success) {
               //err
               alert(res.message);
@@ -85,11 +83,10 @@ const useCompanyList = () => {
             setCurrentRate(res.info.rate);
             setIsLoadingCurrency(false);
             api.getRates(fromCurrency.value, symbols).then(ratesRes => {
-              console.log('ratesRes', ratesRes.rates);
-              currenciesRates.next(
+              currenciesRates$.next(
                 Object.entries(ratesRes.rates).map(rate => {
                   return {
-                    title: Currencies.find(curr => curr.value === rate[0])?.name || '',
+                    title: CurrenciesSymbols[rate[0]].name || '',
                     key: rate[0],
                     value: rate[1] * amount,
                   };
@@ -109,7 +106,7 @@ const useCompanyList = () => {
         setIsLoadingCurrency(false);
       }
     },
-    [currenciesRates, fromCurrency, toCurrency],
+    [currenciesRates$, fromCurrency, toCurrency],
   );
 
   const onSwapCurrencies = useCallback(() => {
@@ -119,52 +116,93 @@ const useCompanyList = () => {
   }, [fromCurrency, toCurrency]);
 
   useEffect(() => {
-    const sub = currenciesRates.subscribe(setTopRates);
-    if (!IsHomePage) {
-      //get Month Rates
-      setIsLoadingRates(true);
-      // try {
-      //   api
-      //     .getTimeseriesLastYear(fromCurrency.value, toCurrency.value)
-      //     .then(res => {
-      //       if (!res.success) {
-      //         alert(res.message);
-      //         setIsLoadingRates(false);
-      //         return;
-      //       }
-      //       console.log('res =====', res);
-      //       const {rates} = res;
-      //       // Convert the "rates" object into an array of rate objects
-      //       const ratesArray = Object.entries(rates).map(([date, rate]) => ({date, ...rate}));
-      //       // Group the rate objects by month
-      //       const ratesByMonth$ = from(ratesArray).pipe(
-      //         groupBy(rate => rate.date.substring(0, 7)), // Use the first 7 characters of the date string as the key
-      //         mergeMap(group$ =>
-      //           group$.pipe(
-      //             last(), // Get the last rate object in the group
-      //           ),
-      //         ),
-      //       );
-      //       // Convert the ratesByMonth$ observable into an object
-      //       const ratesByMonthObject = {};
-      //       ratesByMonth$.subscribe(rate => {
-      //         const month = rate.date.substring(0, 7); //remove el youm
-      //         console.log('rate', rate);
-      //         ratesByMonthObject[month] = rate[Object.keys(rate)[1]];
-      //       });
-      //       setRatesByMonth(ratesByMonthObject);
-      //     })
-      //     .catch(() => {
-      //       alert('connection Error, please try again');
-      //     })
-      //     .finally(() => {
-      //       setIsLoadingRates(false);
-      //     });
-      // } catch {
-      //   alert('connection Error, please try again');
-      // }
+    const currenciesRatesSub = currenciesRates$.subscribe(setTopRates);
+    const setAllCurrenciesSub = allCurrencies$.subscribe(setAllCurrencies);
+
+    //get all Currencies
+    try {
+      api
+        .getCurrencies()
+        .then(res => {
+          if (!res.success) {
+            //err
+            alert(res.message);
+            return;
+          }
+          const {symbols} = res;
+          const newCurrencies: Currency[] = Object.entries(symbols).map(([key, value]) => {
+            return {
+              name: value,
+              value: key,
+              symbol: (CurrenciesSymbols[key] && CurrenciesSymbols[key].symbol) || '£',
+            };
+          });
+          allCurrencies$.next(newCurrencies);
+
+          const selectedFromCurrency =
+            newCurrencies.find(curr => curr.value === queryFromCurrency[0]?.toUpperCase()) ||
+            newCurrencies[0];
+          const selectedToCurrency =
+            newCurrencies.find(curr => curr.value === queryToCurrency[0]?.toUpperCase()) ||
+            newCurrencies[46];
+          setFromCurrency(selectedFromCurrency);
+          setToCurrency(selectedToCurrency);
+          setIsCurrenciesloaded(false);
+
+          if (!IsHomePage) {
+            //get Month Rates
+            setIsLoadingRates(true);
+            try {
+              api
+                .getTimeseriesLastYear(selectedFromCurrency.value, selectedToCurrency.value)
+                .then(res => {
+                  if (!res.success) {
+                    alert(res.message);
+                    setIsLoadingRates(false);
+                    return;
+                  }
+                  const {rates} = res;
+                  // fetch rates object into an array of rate objects
+                  const ratesArray = Object.entries(rates).map(([date, rate]) => ({date, ...rate}));
+                  // group rate objects by month
+                  const ratesByMonth$ = from(ratesArray).pipe(
+                    groupBy(rate => rate.date.substring(0, 7)), // 7 characters of key
+                    mergeMap(group$ =>
+                      group$.pipe(
+                        last(), // last rate object in the group
+                      ),
+                    ),
+                  );
+                  const ratesByMonthObject = {};
+                  ratesByMonth$.subscribe(rate => {
+                    const month = rate.date.substring(0, 7); //remove el youm
+                    ratesByMonthObject[month] = rate[Object.keys(rate)[1]];
+                  });
+                  setRatesByMonth(ratesByMonthObject);
+                })
+                .catch(() => {
+                  alert('connection Error, please try again');
+                })
+                .finally(() => {
+                  setIsLoadingRates(false);
+                });
+            } catch {
+              alert('connection Error, please try again');
+            }
+          }
+        })
+        .catch(() => {
+          alert('connection Error !, please realod the page');
+        });
+    } catch {
+      alert('connection Error !, please realod the page');
+      setIsCurrenciesloaded(false);
     }
-    return () => sub.unsubscribe();
+
+    return () => {
+      currenciesRatesSub.unsubscribe();
+      setAllCurrenciesSub.unsubscribe();
+    };
   }, []);
 
   return {
@@ -178,6 +216,8 @@ const useCompanyList = () => {
     IsSupportedCurrency,
     IsHomePage,
     ratesByMonth,
+    allCurrencies,
+    isCurrenciesloaded,
     onChangeFromCurrency,
     onChangeToCurrency,
     onConvertCurrency,

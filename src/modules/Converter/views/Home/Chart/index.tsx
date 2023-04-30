@@ -5,7 +5,6 @@ import './index.css';
 
 function RatesByMonth() {
   const {ratesByMonth, fromCurrency, toCurrency} = useContext(ConverterContext);
-  console.log('dataInArr', ratesByMonth);
 
   const monthNames = [
     'January',
@@ -35,12 +34,13 @@ function RatesByMonth() {
       return [];
     }
   }, [ratesByMonth]);
-  console.log('dataInArr', dataInArr);
 
   return (
     <div className="chartWrapper">
       <h2>{`Chart that define historical data OF (2022)`}</h2>
-      <h3>{`${fromCurrency.name} (${fromCurrency.value}) to ${toCurrency.name} (${toCurrency.value})`}</h3>
+      {fromCurrency && toCurrency && (
+        <h3>{`${fromCurrency.name} (${fromCurrency.value}) to ${toCurrency.name} (${toCurrency.value})`}</h3>
+      )}
       <br></br>
       <ResponsiveContainer width={'100%'} height={350}>
         <LineChart data={dataInArr} margin={{top: 5, right: 10, bottom: 5, left: 0}}>
@@ -56,18 +56,3 @@ function RatesByMonth() {
 }
 
 export default RatesByMonth;
-
-// const data = [
-//   {name: 'Page A', uv: 400, pv: 2400, amt: 2400},
-//   {name: 'Page B', uv: 200, pv: 2400, amt: 2400},
-//   {name: 'Page C', uv: 100, pv: 2400, amt: 2400},
-//   {name: 'Page D', uv: 10, pv: 2400, amt: 2400},
-// ];
-
-// function Chart() {
-//   return (
-
-//   );
-// }
-
-// export default Chart;

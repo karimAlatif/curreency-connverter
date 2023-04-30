@@ -1,7 +1,6 @@
 import React, {useMemo} from 'react';
 import {StringParam, useQueryParam} from 'use-query-params';
 import './index.css';
-import {Currencies} from 'modules/types';
 
 export default function Header() {
   const queyFromCurrency = useQueryParam('From', StringParam);

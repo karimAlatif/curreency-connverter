@@ -1,9 +1,8 @@
 import React, {useState, useCallback, useContext} from 'react';
-import './index.css';
 import ConverterContext from '../../../context/ConverterContext';
 import Spinner from 'shared/components/Spinner';
-
-import CountrySelect from './CountrySelect';
+import CountrySelect from './CurrencySelect';
+import './index.css';
 
 function ConverterPanel() {
   const [amount, setAmount] = useState<number>(1);
@@ -14,7 +13,6 @@ function ConverterPanel() {
     queryResult,
     toCurrency,
     fromCurrency,
-    topRates,
     currentRate,
     IsHomePage,
     onConvertCurrency,
@@ -33,28 +31,14 @@ function ConverterPanel() {
       setAmount(inputValue);
       setIsValid(true);
     }
-    // console.log('value', value);
-    // const regex = /^[0-9]*\.?[0-9]*$/;
-
-    // if (!value) {
-    //   setIsValid(false);
-    //   return;
-    // }
-
-    // if (Number(value) === 0) {
-    //   setIsValid(false);
-    //   return;
-    // } else if
-    // setIsValid(true);
-    // Do something with the validated number
   }, []);
-
-  console.log('value', isValid);
-  const style = {'--unit': `'${fromCurrency.symbol}'`} as React.CSSProperties; // Set the --unit CSS variable to the unit prop
+  const style = {'--unit': `'${fromCurrency && fromCurrency.symbol}'`} as React.CSSProperties; // Set the --unit CSS variable to the unit prop
 
   return (
     <div className="wrapper">
-      {!IsHomePage && <h3>{`${fromCurrency.name} (${fromCurrency.value})`}</h3>}
+      {!IsHomePage && (
+        <h3>{`${fromCurrency && fromCurrency.name} (${fromCurrency && fromCurrency.value})`}</h3>
+      )}
       <div className="input-row">
         <div className="input-container mr">
           <label className="label" htmlFor="input-1">
@@ -80,7 +64,7 @@ function ConverterPanel() {
           <div className="input select-wrapper">
             <CountrySelect
               isDiabled={!IsHomePage}
-              value={fromCurrency.value}
+              value={(fromCurrency && fromCurrency.value) || ''}
               onChange={newCurrency => {
                 onChangeFromCurrency(newCurrency);
               }}
@@ -119,7 +103,7 @@ function ConverterPanel() {
           </label>
           <div className="input select-wrapper">
             <CountrySelect
-              value={toCurrency.value}
+              value={(toCurrency && toCurrency.value) || ''}
               onChange={newCurrency => {
                 onChangeToCurrency(newCurrency);
               }}
@@ -144,7 +128,11 @@ function ConverterPanel() {
       <div className="actions">
         <div>
           {IsHomePage && (
-            <a href={`/?From=${fromCurrency.value}&To=${toCurrency.value}`}>
+            <a
+              href={`/?From=${fromCurrency && fromCurrency.value}&To=${
+                toCurrency && toCurrency.value
+              }`}
+            >
               <button className="detailsBut">More Details</button>
             </a>
           )}

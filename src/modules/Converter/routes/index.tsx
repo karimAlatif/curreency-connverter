@@ -23,7 +23,6 @@ const routes: RouteConfig[] = [
   {
     path: AppPaths.HOME,
     component: WithLayout,
-    sideMenu: true,
     routes: [
       {
         path: [AppPaths.HOME],

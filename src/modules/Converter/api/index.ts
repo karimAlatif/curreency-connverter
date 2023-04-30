@@ -1,7 +1,12 @@
-import {ConvertResponse, MonthRateResponse, RatesResponse} from '../definitions/types';
+import {
+  ConvertResponse,
+  CurrenciesResponse,
+  MonthRateResponse,
+  RatesResponse,
+} from '../definitions/types';
 
 const myHeaders = new Headers();
-myHeaders.append('apikey', 'OgxuJHNOjSQ9ijxNk2ZnJP2oXZ276TB6');
+myHeaders.append('apikey', 'TwsKk3h1tmbd7EV7yuL7fkZz6z0d9ZsR');
 
 const API_URL = 'https://api.apilayer.com';
 
@@ -45,4 +50,13 @@ export const getTimeseriesLastYear = (
     `${API_URL}/fixer/timeseries?start_date=2022-01-01&end_date=2023-01-01&base=${base}&symbols=${symbols}`,
     requestOptions,
   ).then(response => response.json());
+};
+
+export const getCurrencies = (): Promise<CurrenciesResponse> => {
+  const requestOptions: RequestInit = {
+    method: 'GET',
+    redirect: 'follow',
+    headers: myHeaders,
+  };
+  return fetch(`${API_URL}/fixer/symbols`, requestOptions).then(response => response.json());
 };

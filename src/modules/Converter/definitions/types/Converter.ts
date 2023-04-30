@@ -62,3 +62,10 @@ export interface MonthRateResponse {
 //   country: typeof Countries.Egypt;
 //   city: keyof typeof EgyptCites;
 // }
+export interface CurrenciesResponse {
+  success: boolean;
+  symbols: {
+    [key: string]: string;
+  };
+  message: string;
+}

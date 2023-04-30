@@ -1,0 +1,30 @@
+{
+  "general": {
+    "404": {
+      "title": "Page Not Found",
+      "homeButton": "Back To Home Page"
+    }
+  },
+  "companies": {
+    "list": {
+      "title": "title",
+      "keys": "Keys",
+      "no_companies": "No companies to show.",
+      "no_companies_matched": "No matched results."
+    },
+    "form": {
+      "title": "Create New Company",
+      "editTitle": "Edit Company",
+      "subTitle": "Company Details",
+      "name": "Name",
+      "description": "Description",
+      "industryType": "Industry Type",
+      "tags": "Tags",
+      "country": "Country",
+      "city": "City",
+      "address": "Adress",
+      "isActive": "Is Active",
+      "infoText": "Please note that the company won't be display in the list "
+    }
+  }
+}

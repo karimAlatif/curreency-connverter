@@ -1,0 +1,274 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  margin: 0 auto;
+  flex-direction: column;
+}
+
+.input-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.input-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 25%;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  height: 80px;
+}
+
+.mr {
+  margin-right: 2%;
+}
+
+.large {
+  width: 33%;
+}
+
+.label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+
+
+input[type="number"]:invalid {
+  border: 2px solid red;
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.errMsg {
+  color: red;
+  font-size: .8rem;
+}
+
+.rounded-button {
+  display: inline-flex;
+  background: none;
+  border: 1px solid rgb(221, 221, 221);
+  color: #4c80b6;
+  border-radius: 50%;
+  padding: 16px;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.rounded-button svg {
+  fill: #4c80b6;
+  width: 16px;
+  height: 16px;
+  /* color: rgb(0, 108, 224); */
+}
+
+
+.rounded-button:hover {
+  background-color: rgb(243, 243, 243);
+}
+
+
+.input {
+  display: block;
+  width: 100%;
+  border: 1px solid rgb(221, 221, 221);
+  border-radius: 5px;
+  padding: 0.5rem;
+  font-size: 1.1rem;
+  margin-top: 5px;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.input-with-unit {
+  position: relative;
+  display: inline-block;
+}
+
+.input-with-unit input[type="text"] {
+  padding-right: 1.5em;
+}
+
+.input-with-unit::after {
+  content: var(--unit); 
+  position: absolute;
+  top: 50%;
+  right: 0.5em;
+  transform: translateY(-50%);
+}
+
+.input:focus {
+  outline: none;
+  border-color: #00a0e9;
+}
+
+.input:hover {
+  border-color: #00a0e9;
+}
+
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.select {
+  appearance: none;
+  outline: none;
+  width: 100%;
+  /* height: 40px; */
+  /* padding: 10px; */
+  border: none;
+  border-radius: 5px;
+  /* background-color: #f5f5f5; */
+  font-size: .9rem;
+  color: #333;
+}
+
+.select-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  fill: #999;
+}
+
+.select:focus+.select-icon {
+  fill: #007bff;
+}
+
+
+.label-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: .3rem;
+  margin-left: 1rem;
+}
+
+.main-label {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  margin: .1rem 0px;
+  color: #4c80b6;
+}
+
+.sub-label {
+  font-size: .95rem;
+  margin-bottom: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 2rem auto;
+  flex-direction: row-reverse;
+}
+
+.actionBut {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0px;
+  width: auto;
+  cursor: pointer;
+  margin: 0px;
+  outline-offset: 4px;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition-property: background-color, border-color;
+  transition-duration: 0.3s;
+  padding: 10px 20px;
+  font-size: 1.15rem;
+  color: rgb(255, 255, 255);
+  background: #4c80b6;
+  border: 2px solid #548ecc;
+  border-radius: 8px;
+  margin: 5px;
+}
+
+.actionBut:hover {
+  background-color: #4493e7;
+  border-color: #548ecc;
+}
+
+.actionBut:disabled {
+  border-color: rgb(255, 255, 255);
+  background: gray;
+  cursor: default;
+}
+
+
+
+.detailsBut {
+  background-color: white;
+  color: #4c80b6;
+  font-size: 1.15rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 2px solid #4c80b6;
+  transition: all 0.2s ease-in-out 0s;
+  margin: 5px;
+}
+
+.detailsBut:hover {
+  cursor: pointer;
+  background: rgba(0, 108, 224, 0.15);
+}
+
+.hintWrapper {
+  display: flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  justify-content: flex-start;
+  padding: 8px;
+  background: rgb(242, 247, 254);
+  border-radius: 6px;
+  max-width: 540px;
+  font-size: 16px;
+  margin: 0px 8px 8px 0px;
+  color: rgb(92, 102, 123);
+}
+
+.hintWrapper svg {
+  color: rgb(92, 102, 123);
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: 4px;
+  margin-right: 1rem;
+}
+
+
+
+@media only screen and (max-width: 768px) {
+  .input-container {
+    width: 100%;
+    margin-right: 0px;
+  }
+
+  .convertBut-container {
+    width: 100%;
+  }
+
+
+  .hintWrapper svg {
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-right: 0.5rem;
+  }
+}

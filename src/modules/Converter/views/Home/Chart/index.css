@@ -1,0 +1,21 @@
+.chartWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 2rem 25rem;
+    min-height: 350px;
+}
+
+.chartWrapper h3 {
+    margin: 6px;
+    color: #4c80b6;
+}
+
+
+  @media screen and (max-width: 576px) {
+    .chartWrapper {
+        padding: 2rem 2rem;
+    }
+
+}

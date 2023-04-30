@@ -1,0 +1,83 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background-color: #023870;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+
+.Mlogo {
+  margin-left: .65rem;
+  width: 42px;
+  height: 42px;
+  margin-right: 0.5rem;
+}
+
+.Mlogo img {
+  height: 2.5rem;
+}
+
+.nav-links a {
+  margin-left: 1rem;
+}
+
+
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+nav h1 {
+  color: #fff;
+  font-size: 24px;
+}
+
+nav button {
+  background-color: #fff;
+  color: #4c80b6;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 0px 10px;
+}
+
+/* Style the active class, and buttons on mouse-over */
+.active, .nav button:hover {
+  background-color: #4c80b6;
+  color: white;
+}
+
+nav button:hover {
+  background-color: #4c80b6;
+  color: #fff;
+}
+
+.button-group {
+  display: flex;
+}
+
+@media screen and (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav ul {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  nav ul li:last-child a {
+    margin-top: 10px;
+  }
+}

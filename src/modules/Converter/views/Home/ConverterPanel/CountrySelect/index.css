@@ -1,0 +1,47 @@
+/* CurrencySelect.module.css */
+
+.selectWrapper {
+    position: relative;
+}
+
+.select {
+    appearance: none;
+    -webkit-appearance: none;
+    /* padding: 0.5rem 1rem; */
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+    /* background-color: #fff; */
+    /* border: 2px solid #ddd; */
+    outline: none;
+    cursor: pointer;
+}
+
+.select:hover {
+    border-color: #aaa;
+}
+
+.select:focus {
+    border-color: #555;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #333;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.option:hover {
+    background-color: #eee;
+}
+
+.logo {
+    width: 24px;
+    height: 24px;
+    margin-right: 0.5rem;
+}
